@@ -23,27 +23,45 @@ type SPLIT struct {
 
 // Parse parses raw URL string into the net/url URL struct.
 func (*URL) Parse(url string) *url.URL {
-	parsed, _ := urlx.Parse(url)
+	parsed, err := urlx.Parse(url)
+	if err != nil {
+		ReportError(err, "Failed to parse the url")
+	}
 	return parsed
 }
 
 // Normalize returns normalized URL.
 func (*URL) Normalize(url string) string {
-	parsed, _ := urlx.Parse(url)
-	normalized, _ := urlx.Normalize(parsed)
+	parsed, err := urlx.Parse(url)
+	if err != nil {
+		ReportError(err, "Failed to parse the url")
+	}
+	normalized, err := urlx.Normalize(parsed)
+	if err != nil {
+		ReportError(err, "Failed to normalize the url")
+	}
 	return normalized
 }
 
 // SplitHostPort splits network address of the form "host:port" into host and port.
 func (*URL) SplitHostPort(url string) *SPLIT {
-	parsed, _ := urlx.Parse(url)
-	host, port, _ := urlx.SplitHostPort(parsed)
+	parsed, err := urlx.Parse(url)
+	if err != nil {
+		ReportError(err, "Failed to parse the url")
+	}
+	host, port, err := urlx.SplitHostPort(parsed)
+	if err != nil {
+		ReportError(err, "Failed to split the url")
+	}
 	return &SPLIT{Host: host, Port: port}
 }
 
 // Resolve resolves the URL host to its IP address.
 func (*URL) Resolve(url string) *net.IPAddr {
-	parsed, _ := urlx.Parse(url)
-	ip, _ := urlx.Resolve(parsed)
+	parsed, err := urlx.Parse(url)
+	ip, err := urlx.Resolve(parsed)
+	if err != nil {
+		ReportError(err, "Failed to resolve the url")
+	}
 	return ip
 }
