@@ -1,4 +1,4 @@
-module github.com/dgzlopes/k6-extension-url
+module github.com/dgzlopes/xk6-url
 
 go 1.15
 
